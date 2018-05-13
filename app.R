@@ -13,7 +13,10 @@ ui <- fluidPage(
   sidebarLayout(
              sidebarPanel(
                p("Welcome!"),
-               googleAuthUI("gauth_login")
+               gar_auth_jsUI("gauth_login",
+                             approval_prompt = "offline",
+                             login_class = "btn btn-primary",
+                             logout_class = "btn btn-primary")
              ),
              mainPanel(
                textOutput("display_username")
@@ -23,9 +26,7 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   ## Authentication
-  accessToken <- callModule(googleAuth, "gauth_login",
-                            login_class = "btn btn-primary",
-                            logout_class = "btn btn-primary")
+  accessToken <- callModule(gar_auth_js, "gauth_login")
   userDetails <- reactive({
     validate(
       need(accessToken(), "not logged in")
